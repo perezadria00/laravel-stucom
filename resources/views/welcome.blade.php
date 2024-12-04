@@ -18,7 +18,12 @@
     <ul>
         <li><a href=/filmout/oldFilms>Pelis antiguas</a></li>
         <li><a href=/filmout/newFilms>Pelis nuevas</a></li>
-        <li><a href=/filmout/films>Pelis</a></li>
+        <li><a href="/filmout/films">Todas las pelis</a></li>
+        <li><a href=/filmout/listFilmsByYear>Pelis filtradas por año</a></li>
+        <li><a href=/filmout/listFilmsByGenre>Pelis filtradas por género</a></li>
+        <li><a href="/filmout/sortFilms">Pelis ordenadas de más nuevas a más viejas</a></li>
+        <li><a href="/filmout/countFilms">Contador de películas</a></li>
+        
     </ul>
     <!-- Add Bootstrap JS and Popper.js (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
