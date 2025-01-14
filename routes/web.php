@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\FilmController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Middleware\ValidateSignature;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::middleware('year')->group(function () {
     Route::prefix('filmout')->group(function () {
@@ -20,3 +22,9 @@ Route::middleware('year')->group(function () {
         Route::get('countFilms', [FilmController::class, 'countFilms']);
     });
 });
+
+
+Route::prefix('filmin')->middleware('ValidateUrl')->group(function () {
+    Route::post('/create', [FilmController::class, 'createFilm'])->name('createFilm');
+});
+

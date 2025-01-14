@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use App\Models\Film;
+use Illuminate\Http\Request;
+
+
 
 class FilmController extends Controller
 {
@@ -12,8 +16,8 @@ class FilmController extends Controller
      */
     public static function readFilms(): array
     {
-        $films = Storage::json('/public/films.json');
-        return $films;
+        
+        return Film::all()->toArray();
     }
     /**
      * List films older than input year 
@@ -156,6 +160,52 @@ class FilmController extends Controller
     return view('films.count', ['totalFilms' => $totalFilms, 'title' => $title]);
 }
 
+public function createFilm(Request $request)
+{
+    
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'year' => 'required|integer|min:1895|max:' . date('Y'),
+        'genre' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'duration' => 'required|integer|min:1|max:500',
+        'img_url' => 'required|url|max:65535', 
+    ], [
+        'img_url.required' => 'La URL de la imagen es obligatoria.',
+        'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
+    ]);
+
+   
+    if ($this->isFilm($validatedData['name'])) {
+        return redirect('/')->with('error', 'La película ya existe.');
+    }
+
+    try {
+        
+        Film::create([
+            'name' => $validatedData['name'],
+            'year' => $validatedData['year'],
+            'genre' => $validatedData['genre'],
+            'country' => $validatedData['country'],
+            'duration' => $validatedData['duration'],
+            'img_url' => $validatedData['img_url'],
+            'created_at' => now(), 
+            'updated_at' => now(),
+        ]);
+
+        
+        return redirect('/filmout/films')->with('success', 'Película añadida correctamente.');
+    } catch (\Exception $e) {
+       
+        return redirect('/')->with('error', 'Hubo un problema al añadir la película: ' . $e->getMessage());
+    }
+}
+
+
+public function isFilm(string $name): bool
+{
+    return Film::where('name', $name)->exists();
+}
 
    
 }
