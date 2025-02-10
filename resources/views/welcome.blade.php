@@ -37,16 +37,17 @@
         <div class="col-md-6">
             <h3 class="text-center mb-4">Menú</h3>
             <ul class="list-group">
-                <li class="list-group-item"><a href="/filmout/oldFilms">Pelis antiguas</a></li>
-                <li class="list-group-item"><a href="/filmout/newFilms">Pelis nuevas</a></li>
-                <li class="list-group-item"><a href="/filmout/films">Todas las pelis</a></li>
-                <li class="list-group-item"><a href="/filmout/listFilmsByYear">Pelis filtradas por año</a></li>
-                <li class="list-group-item"><a href="/filmout/listFilmsByGenre">Pelis filtradas por género</a></li>
-                <li class="list-group-item"><a href="/filmout/sortFilms">Pelis ordenadas de más nuevas a más viejas</a></li>
+                <li class="list-group-item"><a href="/filmout/films">Ver todas las pelis - Editar/eliminar </a></li>
+                <li class="list-group-item"><a href="/filmout/oldFilms">Ver películas antiguas</a></li>
+                <li class="list-group-item"><a href="/filmout/newFilms">Ver películas nuevas</a></li>
+                <li class="list-group-item"><a href="/filmout/listFilmsByYear">Ver películas filtradas por año</a></li>
+                <li class="list-group-item"><a href="/filmout/listFilmsByGenre">Ver películas filtradas por género</a></li>
+                <li class="list-group-item"><a href="/filmout/sortFilms">Ver películas ordenadas de más nuevas a más viejas</a></li>
                 <li class="list-group-item"><a href="/filmout/countFilms">Contador de películas</a></li>
             </ul>
             
         </div>
+
 
         <!-- Columna derecha: Formulario -->
         <div class="col-md-6">
@@ -89,7 +90,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="img_url">Imagen:</label>
+                    <label for="img_url">Imagen (URL):</label>
                     <input type="url" id="img_url" name="img_url" class="form-control" required>
                     @error('img_url')
                         <small class="text-danger">{{ $message }}</small>
@@ -100,6 +101,8 @@
                 </div>
             </form>
         </div>
+
+        
     </div>
 </div>
 @endsection

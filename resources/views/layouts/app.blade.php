@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Default Title')</title>
+    <title>@yield('title', 'Filmoteca')</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -33,7 +33,6 @@
     <!-- Header -->
     <header class="d-flex bg-primary text-white text-center justify-content-center align-items-center" style="height: 100px;">
         <div class="header-content">
-            @yield('header')
         </div>
     </header>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -16,7 +17,8 @@ class FilmController extends Controller
      */
     public static function readFilms(): array
     {
-        
+
+
         return Film::all()->toArray();
     }
     /**
@@ -133,7 +135,7 @@ class FilmController extends Controller
     public function listFilmsByYearDescending()
     {
 
-        
+
         $title = "Listado de todas las pelis de más nuevas a más viejas";
         $films = FilmController::readFilms();
         $films = collect($films);
@@ -146,66 +148,131 @@ class FilmController extends Controller
     }
 
     public function countFilms()
-{
-    
-    $films = self::readFilms();
-    
-  
-    $totalFilms = count($films);
-    
+    {
 
-    $title = "Contador de Películas";
+        $films = self::readFilms();
 
 
-    return view('films.count', ['totalFilms' => $totalFilms, 'title' => $title]);
-}
+        $totalFilms = count($films);
 
-public function createFilm(Request $request)
-{
-    
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'year' => 'required|integer|min:1895|max:' . date('Y'),
-        'genre' => 'required|string|max:255',
-        'country' => 'required|string|max:255',
-        'duration' => 'required|integer|min:1|max:500',
-        'img_url' => 'required|url|max:65535', 
-    ], [
-        'img_url.required' => 'La URL de la imagen es obligatoria.',
-        'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
-    ]);
 
-   
-    if ($this->isFilm($validatedData['name'])) {
-        return redirect('/')->with('error', 'La película ya existe.');
+        $title = "Contador de Películas";
+
+
+        return view('films.count', ['totalFilms' => $totalFilms, 'title' => $title]);
     }
 
-    try {
-        
-        Film::create([
+    public function createFilm(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'year' => 'required|integer|min:1895|max:' . date('Y'),
+            'genre' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'duration' => 'required|integer|min:1|max:500',
+            'img_url' => 'required|url|max:65535',
+        ], [
+            'img_url.required' => 'La URL de la imagen es obligatoria.',
+            'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
+        ]);
+
+
+        if ($this->isFilm($validatedData['name'])) {
+            
+            Log::error('La película ya existe.');
+            return redirect('/')->with('error', 'La película ya existe.');
+        }
+
+        try {
+
+            Film::create([
+                'name' => $validatedData['name'],
+                'year' => $validatedData['year'],
+                'genre' => $validatedData['genre'],
+                'country' => $validatedData['country'],
+                'duration' => $validatedData['duration'],
+                'img_url' => $validatedData['img_url'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Log::info('Película añadida correctamente.');
+            return redirect('/filmout/films')->with('success', 'Película añadida correctamente.');
+        } catch (\Exception $e) {
+
+            return redirect('/')->with('error', 'Hubo un problema al añadir la película: ' . $e->getMessage());
+        }
+    }
+
+
+    public function isFilm(string $name): bool
+    {
+        return Film::where('name', $name)->exists();
+    }
+
+    public function editFilm($id)
+    {
+        // Busca la película por ID
+        $film = Film::findOrFail($id);
+
+        return view('films.edit', ['film' => $film]);
+    }
+
+    public function updateFilm(Request $request, $id)
+    {
+        try{
+
+            // Validación de datos
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'year' => 'required|integer|min:1895|max:' . date('Y'),
+            'genre' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'duration' => 'required|integer|min:1|max:500',
+            'img_url' => 'required|url|max:65535',
+        ], [
+            'img_url.required' => 'La URL de la imagen es obligatoria.',
+            'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
+        ]);
+
+        // Busca la película por ID y actualiza sus datos
+        $film = Film::findOrFail($id);
+
+        $film->update([
             'name' => $validatedData['name'],
             'year' => $validatedData['year'],
             'genre' => $validatedData['genre'],
             'country' => $validatedData['country'],
             'duration' => $validatedData['duration'],
             'img_url' => $validatedData['img_url'],
-            'created_at' => now(), 
-            'updated_at' => now(),
         ]);
 
+        Log::info('Película actualizada correctamente.');
+        return redirect()->route('listFilms')->with('success', 'Película actualizada correctamente.');
+
+        } catch (\Exception $e){
+            Log::error('La película no se pudo actualizar.');
+            return redirect()->route('listFilms')->with('error', 'Hubo un problema al eliminar la película: ' . $e->getMessage());
+        }
+    
         
-        return redirect('/filmout/films')->with('success', 'Película añadida correctamente.');
-    } catch (\Exception $e) {
-       
-        return redirect('/')->with('error', 'Hubo un problema al añadir la película: ' . $e->getMessage());
     }
-}
 
+    public function deleteFilm($id)
+    {
+        try {
+            // Busca la película por ID
+            $film = Film::findOrFail($id);
 
-public function isFilm(string $name): bool
-{
-    return Film::where('name', $name)->exists();
-}
-
-   
+            // Elimina la película
+            $film->delete();
+            
+            return redirect()->route('listFilms')->with('success', 'Película eliminada correctamente.');
+            Log::info('Película eliminada correctamente.');
+        } catch (\Exception $e) {
+            Log::error('La película no se pudo eliminar.');
+            return redirect()->route('listFilms')->with('error', 'Hubo un problema al eliminar la película: ' . $e->getMessage());
+        }
+    }
 }

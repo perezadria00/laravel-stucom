@@ -20,6 +20,10 @@ Route::middleware('year')->group(function () {
         Route::get('listFilmsByGenre/{genre?}', [FilmController::class, 'listFilmsByGenre']);
         Route::get('sortFilms', [FilmController::class, 'listFilmsByYearDescending']);
         Route::get('countFilms', [FilmController::class, 'countFilms']);
+        Route::get('filmout/edit/{id}', [FilmController::class, 'editFilm'])->name('editFilm');
+        Route::put('filmout/update/{id}', [FilmController::class, 'updateFilm'])->name('updateFilm');
+        Route::delete('filmout/delete/{id}', [FilmController::class, 'deleteFilm'])->name('deleteFilm');
+
     });
 });
 
@@ -27,4 +31,3 @@ Route::middleware('year')->group(function () {
 Route::prefix('filmin')->middleware('ValidateUrl')->group(function () {
     Route::post('/create', [FilmController::class, 'createFilm'])->name('createFilm');
 });
-
