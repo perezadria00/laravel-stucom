@@ -167,7 +167,7 @@ class FilmController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'year' => 'required|integer|min:1895|max:' . date('Y'),
+            'year' => 'required|integer|min:1900|max:2024',
             'genre' => 'required|string|max:255',
             'country' => 'required|string|max:255',
             'duration' => 'required|integer|min:1|max:500',
@@ -179,7 +179,7 @@ class FilmController extends Controller
 
 
         if ($this->isFilm($validatedData['name'])) {
-            
+
             Log::error('La película ya existe.');
             return redirect('/')->with('error', 'La película ya existe.');
         }
@@ -221,42 +221,40 @@ class FilmController extends Controller
 
     public function updateFilm(Request $request, $id)
     {
-        try{
+        try {
 
             // Validación de datos
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'year' => 'required|integer|min:1895|max:' . date('Y'),
-            'genre' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'duration' => 'required|integer|min:1|max:500',
-            'img_url' => 'required|url|max:65535',
-        ], [
-            'img_url.required' => 'La URL de la imagen es obligatoria.',
-            'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
-        ]);
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:2024',
+                'genre' => 'required|string|max:255',
+                'country' => 'required|string|max:255',
+                'duration' => 'required|integer|min:1|max:500',
+                'img_url' => 'required|url|max:65535',
+            ], [
+                'img_url.required' => 'La URL de la imagen es obligatoria.',
+                'img_url.url' => 'La URL de la imagen no es válida. Asegúrate de incluir "http://" o "https://".',
 
-        // Busca la película por ID y actualiza sus datos
-        $film = Film::findOrFail($id);
+            ]);
 
-        $film->update([
-            'name' => $validatedData['name'],
-            'year' => $validatedData['year'],
-            'genre' => $validatedData['genre'],
-            'country' => $validatedData['country'],
-            'duration' => $validatedData['duration'],
-            'img_url' => $validatedData['img_url'],
-        ]);
+            // Busca la película por ID y actualiza sus datos
+            $film = Film::findOrFail($id);
 
-        Log::info('Película actualizada correctamente.');
-        return redirect()->route('listFilms')->with('success', 'Película actualizada correctamente.');
+            $film->update([
+                'name' => $validatedData['name'],
+                'year' => $validatedData['year'],
+                'genre' => $validatedData['genre'],
+                'country' => $validatedData['country'],
+                'duration' => $validatedData['duration'],
+                'img_url' => $validatedData['img_url'],
+            ]);
 
-        } catch (\Exception $e){
+            Log::info('Película actualizada correctamente.');
+            return redirect()->route('listFilms')->with('success', 'Película actualizada correctamente.');
+        } catch (\Exception $e) {
             Log::error('La película no se pudo actualizar.');
             return redirect()->route('listFilms')->with('error', 'Hubo un problema al eliminar la película: ' . $e->getMessage());
         }
-    
-        
     }
 
     public function deleteFilm($id)
@@ -267,7 +265,7 @@ class FilmController extends Controller
 
             // Elimina la película
             $film->delete();
-            
+
             return redirect()->route('listFilms')->with('success', 'Película eliminada correctamente.');
             Log::info('Película eliminada correctamente.');
         } catch (\Exception $e) {

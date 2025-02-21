@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group">
                     <label for="year">Año:</label>
-                    <input type="number" id="year" name="year" class="form-control" min="1895" max="2024" required>
+                    <input type="number" id="year" name="year" class="form-control" min="1900" max="2024" required>
                     @error('year')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group">
                     <label for="duration">Duración:</label>
-                    <input type="number" id="duration" name="duration" class="form-control" min="60" max="400" required>
+                    <input type="number" id="duration" name="duration" class="form-control" min="60" max="500" required>
                     @error('duration')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
