@@ -13,7 +13,7 @@ return new class extends Migration {
 
             // Luego eliminamos la columna
             $table->dropColumn('film_id');
-            $table->dropColumn('film_name');
+
 
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration {
         Schema::table('audiences', function (Blueprint $table) {
 
             // Volvemos a agregar la columna eliminada
-            $table->string('film_name');
+            
             $table->unsignedBigInteger('film_id');
 
             // Restauramos la clave foránea
