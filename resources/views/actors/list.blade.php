@@ -27,12 +27,12 @@
             <tbody>
                 @foreach($actors as $actor)
                     <tr>
-                        <td>{{ $actor['name'] }}</td>
-                        <td>{{ $actor['surname'] }}</td>
-                        <td>{{ $actor['birthdate'] }}</td>
-                        <td>{{ $actor['country'] }}</td>
+                        <td>{{ $actor->name }}</td>
+                        <td>{{ $actor->surname  }}</td>
+                        <td>{{  $actor->birthdate  }}</td>
+                        <td>{{ $actor->country  }}</td>
                         <td>
-                            <img src="{{ $actor['img_url'] }}" alt="{{ $actor['name'] }}" class="img-fluid" style="width: 100px; height: auto;">
+                            <img src="{{ $actor->img_url }}" alt="{{ $actor->name }}" class="img-fluid" style="width: 100px; height: auto;">
                         </td>
                     </tr>
                 @endforeach
