@@ -29,7 +29,5 @@ class AudiencesSeeder extends Seeder
         }
 
         DB::table('audiences')->insert($audiences);
-
-        $this->command->info('Se insertaron 25 registros en la tabla "audiences".');
     }
 }
