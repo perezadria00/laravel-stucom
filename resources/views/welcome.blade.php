@@ -35,7 +35,7 @@
     <div class="row">
         <!-- Columna izquierda: Lista UL -->
         <div class="col-md-6">
-            <h3 class="text-center mb-4">Menú</h3>
+            <h3 class="text-center mb-4">Menú Películas</h3>
             <ul class="list-group">
                 <li class="list-group-item"><a href="/filmout/films">Ver todas las pelis - Editar/eliminar </a></li>
                 <li class="list-group-item"><a href="/filmout/oldFilms">Ver películas antiguas</a></li>
@@ -45,9 +45,14 @@
                 <li class="list-group-item"><a href="/filmout/sortFilms">Ver películas ordenadas de más nuevas a más viejas</a></li>
                 <li class="list-group-item"><a href="/filmout/countFilms">Contador de películas</a></li>
             </ul>
-            
         </div>
 
+        <div class="col-md-6">
+            <h3 class="text-center mb-4">Menú Actores</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="/actorout/actors">Ver todos los actores</a></li>
+            </ul>
+        </div>
 
         <!-- Columna derecha: Formulario -->
         <div class="col-md-6">
@@ -102,7 +107,7 @@
             </form>
         </div>
 
-        
+
     </div>
 </div>
 @endsection
