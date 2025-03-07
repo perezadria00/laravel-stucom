@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\FilmController;
+use App\Http\Controllers\ActorController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Routing\Middleware\ValidateSignature;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,4 +31,8 @@ Route::middleware('year')->group(function () {
 
 Route::prefix('filmin')->middleware('ValidateUrl')->group(function () {
     Route::post('/create', [FilmController::class, 'createFilm'])->name('createFilm');
+});
+
+Route::prefix('actorout')->group(function () {
+    Route::get('actors', [ActorController::class]);
 });
